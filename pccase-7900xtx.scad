@@ -17,7 +17,7 @@ powerD = 125.5;
 powerH = 100.5;
 powerY = mbD + 5;
 videoX = thick + powerW + 6;
-videoZ = 40;
+videoZ = 55;
 videoFanZ = videoZ + 1;
 videoBracketZ = videoZ + 91;
 
@@ -62,24 +62,23 @@ difference() {
             cube([thick * 2, 100, thick * 2]);
     }
     // video
-    difference() {
-        translate([videoX, 0, 0])
-            rotate([0, 90, 0])
-                linear_extrude(100)
-                    polygon([[-videoZ, thick * 3], [-thick, thick * 3],
-                            [-thick, mbD + 10 - (videoZ - thick) * 0.6], [-videoZ, mbD + 10]]);
-        translate([videoX + 20 - thick * 2, 0, 0])
-            cube([thick * 2, rearD, thick * 5]);
-    }
-    translate([videoX + 20, thick * 3, 0])
-        cube([100, rearD, H]);
+    translate([videoX, thick * 3, thick])
+        cube([30 - thick, rearD - thick * 3, videoZ - thick]);
+    translate([videoX + 30 - thick, thick * 3, 40])
+        cube([thick, rearD - thick * 3, H - 40]);
+    translate([videoX + 30, thick * 3, 0])
+        cube([100, rearD - thick * 3, videoZ]);
+    translate([videoX + 30 - thick, 0, 0])
+        rotate([0, 90, 0])
+            linear_extrude(thick)
+                polygon([[-40, thick * 3], [-15, thick * 3], [-15, thick * 5], [-40, thick * 5 + 25]]);
     // video bracket
     translate([videoX - 1, 0, videoBracketZ])
         cube([40.5, thick * 3, 3]);
     // video bracket hole
     hull() {
         for (z = [30, videoBracketZ - 20]) {
-            translate([videoX + 20, 0, z])
+            translate([videoX + 20 - thick, 0, z])
                 rotate([-90, 0, 0])
                     cylinder(r = 10, h = thick * 3, $fn = 6);
         }
