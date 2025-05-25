@@ -1,7 +1,7 @@
 thick = 2;
-mbW = 50;
+mbW = 52;
 mbD = 173.5;
-mbH = 178;
+mbH = 174;
 mbBackplateH = 164;
 mbScrewX = thick + 42;
 mbScrew1Y = 35;
@@ -110,7 +110,7 @@ difference() {
                     cylinder(r = 14, h = thick, $fn = 6);
         }
     }
-    // screw holes
+    // front screw holes
     for (x = [thick + 10, thick + 20, videoX - 20, videoX - 10]) {
         translate([x, rearD - 10, 0])
             rotate([180, 0, 0])
@@ -118,29 +118,23 @@ difference() {
         translate([x, rearD - 10, H])
                 sarakineji_hole();
     }
+    // mb screw holes
+    for (x = [mbScrewX - 5, mbScrewX + 7]) {
+        translate([x, mbScrew1Y, 0])
+            rotate([180, 0, 0])
+                sarakineji_hole();
+        translate([x, mbScrew3Y, H])
+            sarakineji_hole();
+    }
 }
 
 // motherboard screwholes
-difference() {
-    translate([mbScrewX - 15, mbScrew1Y - 4, thick])
-        cube([18, 8, mbScrew1Z + 4 - thick]);
-    translate([mbScrewX, mbScrew1Y - 4, mbScrew1Z - 6])
-        cube([30, 30, 30]);
-    mbScrewHole(mbScrew1Y, mbScrew1Z);
-}
 difference() {
     translate([mbScrewX - 15, mbScrew2Y - 4, thick])
         cube([18, 8, mbScrew2Z + 4 - thick]);
     translate([mbScrewX, mbScrew2Y - 4, mbScrew2Z - 6])
         cube([30, 30, 30]);
     mbScrewHole(mbScrew2Y, mbScrew2Z);
-}
-difference() {
-    translate([mbScrewX - 15, mbScrew3Y - 3.5, mbScrew3Z - 4])
-        cube([18, 7.5, H - (mbScrew3Z - 4)]);
-    translate([mbScrewX, mbScrew3Y - 3.5, mbScrew3Z - 4])
-        cube([30, 30, (thick + mbH) - (mbScrew3Z - 4)]);
-    mbScrewHole(mbScrew3Y, mbScrew3Z);
 }
 difference() {
     translate([mbScrewX - 15, mbScrew4Y - 4, mbScrew4Z - 4])
