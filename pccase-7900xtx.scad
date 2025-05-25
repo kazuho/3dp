@@ -3,12 +3,12 @@ mbW = 52;
 mbD = 173.5;
 mbH = 174;
 mbBackplateH = 164;
-mbScrewX = thick + 42;
-mbScrew1Y = 35;
+mbScrewX = thick + 45;
+mbScrew1Y = 36;
 mbScrew1Z = thick + 10;
 mbScrew2Y = mbD - 5;
 mbScrew2Z = mbScrew1Z;
-mbScrew3Y = 16;
+mbScrew3Y = 14;
 mbScrew3Z = thick + mbH - 6;
 mbScrew4Y = mbD - 5;
 mbScrew4Z = mbScrew3Z;
@@ -23,7 +23,7 @@ videoBracketZ = videoZ + 91;
 
 W = videoX + 45;
 rearD = mbD + 20;
-H = thick + mbH + 3 + thick;
+H = thick + mbH + 6 + thick;
 
 difference() {
     union() {
@@ -118,13 +118,18 @@ difference() {
                 sarakineji_hole();
     }
     // mb screw holes
-    for (x = [mbScrewX - 5, mbScrewX + 7]) {
+    for (x = [mbScrewX - 6, mbScrewX + 6]) {
         translate([x, mbScrew1Y, 0])
             rotate([180, 0, 0])
                 sarakineji_hole();
         translate([x, mbScrew3Y, H])
             sarakineji_hole();
     }
+    // screw2 driver hole
+    translate([videoX, mbScrew2Y, mbScrew2Z])
+        rotate([0, 90, 0])
+            rotate([0, 0, 30])
+                cylinder(r = 7, h = 100, $fn = 6);
 }
 
 // motherboard screwholes
