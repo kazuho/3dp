@@ -117,6 +117,10 @@ difference() {
         translate([x, rearD - 10, H])
                 sarakineji_hole();
     }
+    for (x = [videoX + 30 - thick - 10, videoX + 30 - thick - 20])
+        translate([x, rearD - 10, 0])
+            rotate([180, 0, 0])
+                sarakineji_hole();
     // mb screw holes
     for (x = [mbScrewX - 6, mbScrewX + 6]) {
         translate([x, mbScrew1Y, 0])
