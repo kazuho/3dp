@@ -15,11 +15,12 @@ mbScrew4Z = mbScrew3Z;
 powerW = 64.5;
 powerD = 125.5;
 powerH = 100.5;
-powerY = mbD + 5;
+powerZ = 30;
 videoX = thick + powerW + 6;
 
 rearD = mbD + 20;
 frontD = 350 - rearD;
+D = rearD + frontD;
 H = thick + mbH + 6 + thick;
 
 // rear
@@ -154,12 +155,12 @@ if (1) {
                 translate([videoX - 10, rearD + 0.2, 0])
                     cube([10, frontD - 0.2, 10]);
                 translate([videoX - thick * 2, rearD + 0.2, 0])
-                    cube([thick * 2, frontD - 0.2, 20]);
+                    cube([thick * 2, frontD - 0.2, powerZ]);
                 translate([videoX - 10, rearD + 0.2, H - 10])
                     cube([10, frontD - 0.2, 10]);
-                translate([videoX - 10, rearD + frontD - 10, 0])
+                translate([videoX - 10, D - 10, 0])
                     cube([10, 10, H]);
-                translate([videoX - thick * 2, rearD + frontD - 20, 0])
+                translate([videoX - thick * 2, D - 20, 0])
                     cube([thick * 2, 20, H]);
                 linear_extrude(H)
                     polygon([[thick, rearD - 20], [thick, rearD + thick * 2], [thick * 2, rearD + thick], [thick * 2, rearD - 20]]);
@@ -169,11 +170,25 @@ if (1) {
                     linear_extrude(videoX)
                         polygon([[-H + thick, rearD - 20], [-H + thick, rearD + thick * 2], [-H + thick * 2, rearD + thick], [-H + thick * 2, rearD - 20]]);
                 }
+                // power
+                translate([0, D - thick - powerD - thick, 0])
+                    cube([videoX, powerD + thick, powerZ]);
             }
+            // power
+            difference() {
+                translate([0, D - thick - powerD, 0])
+                    cube([videoX - thick * 2, powerD, powerZ - thick]);
+                translate([videoX - 10, 0, 0])
+                    cube([10, D, 10]);
+            }
+            translate([thick * 2, D - thick - powerD + 10, powerZ - thick])
+                cube([powerW - thick * 2, powerD - 20, thick]);
+            translate([thick + powerW - 20, D - thick - powerD - thick, powerZ - 10])
+                cube([3, 10 + thick, 10]);
             // side holes
             for (y = [3:5]) {
                 for (z = [0:4]) {
-                    if (y > 3) {
+                    if (y > 3 && z > 0) {
                         translate([0, 40 + y * 50, 30 + z * 28.8])
                             rotate([0, 90, 0])
                                 rotate([0, 0, 30])
