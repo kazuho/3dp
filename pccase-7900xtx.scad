@@ -158,7 +158,7 @@ if (1) {
                     cube([thick * 2, frontD - 0.2, powerZ]);
                 translate([videoX - 10, rearD + 0.2, H - 10])
                     cube([10, frontD - 0.2, 10]);
-                translate([videoX - 10, D - 10, 0])
+                translate([thick + powerW, D - 10, 0])
                     cube([10, 10, H]);
                 translate([videoX - thick * 2, D - 20, 0])
                     cube([thick * 2, 20, H]);
@@ -171,30 +171,28 @@ if (1) {
                         polygon([[-H + thick, rearD - 20], [-H + thick, rearD + thick * 2], [-H + thick * 2, rearD + thick], [-H + thick * 2, rearD - 20]]);
                 }
                 // power
-                translate([0, D - thick - powerD - thick, 0])
-                    cube([videoX, powerD + thick, powerZ]);
+                translate([0, D - thick - powerD , 0])
+                    cube([videoX, powerD, powerZ]);
             }
             // power
             difference() {
-                translate([0, D - thick - powerD, 0])
-                    cube([videoX - thick * 2, powerD, powerZ - thick]);
+                translate([thick, D - thick - powerD, 0])
+                    cube([videoX - thick * 3, powerD, powerZ - thick]);
                 translate([videoX - 10, 0, 0])
                     cube([10, D, 10]);
             }
             translate([thick * 2, D - thick - powerD + 10, powerZ - thick])
                 cube([powerW - thick * 2, powerD - 20, thick]);
-            translate([thick + powerW - 20, D - thick - powerD - thick, powerZ - 10])
-                cube([3, 10 + thick, 10]);
             // side holes
             for (y = [3:5]) {
-                for (z = [0:4]) {
+                for (z = [-1:4]) {
                     if (y > 3 && z > 0) {
                         translate([0, 40 + y * 50, 30 + z * 28.8])
                             rotate([0, 90, 0])
                                 rotate([0, 0, 30])
                                     cylinder(r = 14, h = thick, $fn = 6);
                     }
-                    if (z < 4) {
+                    if (z < 4 && (z > -1 || y == 4)) {
                         translate([0, 65 + y * 50, 44.4 + z * 28.8])
                             rotate([0, 90, 0])
                                 rotate([0, 0, 30])
