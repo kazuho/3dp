@@ -24,7 +24,7 @@ D = rearD + frontD;
 H = thick + mbH + 6 + thick;
 
 // rear
-if (1) {
+if (0) {
     difference() {
         difference() {
             hull() {
@@ -123,16 +123,18 @@ if (1) {
         }
     }
     // build plate adhersion
-    translate([videoX, 0, 0])
-        rotate([-90, 0, 0])
-            cylinder(r = 10, h = 0.2, $fn = 32);
-    translate([videoX, 0, H])
-        rotate([-90, 0, 0])
-            cylinder(r = 10, h = 0.2, $fn = 32);
+    if (0) {
+        translate([videoX, 0, 0])
+            rotate([-90, 0, 0])
+                cylinder(r = 10, h = 0.2, $fn = 32);
+        translate([videoX, 0, H])
+            rotate([-90, 0, 0])
+                cylinder(r = 10, h = 0.2, $fn = 32);
+    }
 }
 
 // front
-if (1) {
+if (0) {
     translate([0, 50, 0]) {
         difference() {
             hull() {
@@ -261,7 +263,7 @@ if (1) {
                     cube([videoX - thick * 2, 1, thick * 2]);
         }
         // build plate adhersion
-        difference() {
+        if (0) difference() {
             union() {
                 translate([videoX, D, 0])
                     rotate([90, 0, 0])
@@ -271,6 +273,108 @@ if (1) {
                         cylinder(r = 10, h = 0.2, $fn = 32);
             }
             cube([videoX, D, H]);
+        }
+    }
+}
+
+// video bracket fastener
+if (0) {
+    translate([50, 50, 0]) {
+        difference() {
+            hull() {
+                translate([videoX, D - 80, 0])
+                    cube([1, 80, H]);
+                translate([videoX + 45 - thick, D - 80, thick])
+                    rotate([-90, 0, 0])
+                        cylinder(r = thick, h = 80, $fn = 32);
+                translate([videoX + 45 - thick, D - 80, H - thick])
+                    rotate([-90, 0, 0])
+                        cylinder(r = thick, h = 80, $fn = 32);
+            }
+            difference() {
+                translate([videoX, D - 80, thick])
+                    cube([45, 80 - thick, H - thick * 2]);
+                translate([videoX, D - 80, 0])
+                    cube([2, 80, 8]);
+                translate([videoX + 2, D - 80, 0])
+                    cube([3, 80, 13]);
+                translate([videoX, D - 15, 0])
+                    cube([2, 15, H]);
+                translate([videoX + 2, D - 25, 0])
+                    cube([3, 25, H]);
+                translate([videoX, D - 80, H - 10])
+                    cube([5, 80, 10]);
+                // power button
+                translate([videoX, D - 70 - thick, H - 9 - thick * 2])
+                    cube([9 + thick, 9 + thick * 2, 9 + thick]);
+            }
+            // power button
+            translate([videoX, D - 70, H - 9 - thick])
+                cube([9, 9, 9]);
+            translate([videoX, D - 70 + 1.5, H - thick])
+                cube([7.5, 6, thick]);
+            translate([videoX, D - 70, H - 9 - thick * 2])
+                cube([2, 5, thick]);
+            // screw holes
+            for (i = [9:11]) {
+                translate([videoX + 5, 30 * i + 7, 7])
+                    rotate([0, 90, 0])
+                        sarakineji_hole();
+                translate([videoX + 5, 30 * i + 7, H - 7])
+                    rotate([0, 90, 0])
+                        sarakineji_hole();
+            }
+            for (i = [1:5])
+                translate([videoX + 5, D - 7, 30 * i + 7])
+                    rotate([0, 90, 0])
+                        sarakineji_hole();
+            // front holes
+            for (z = [thick * 2, H - thick * 4])
+                translate([videoX, D - 1, z])
+                    cube([45 - thick * 2, 1, thick * 2]);
+        }
+        // build plate adhersion
+        if (1) difference() {
+            union() {
+                translate([videoX, D, 0])
+                    rotate([90, 0, 0])
+                        cylinder(r = 10, h = 0.2, $fn = 32);
+                translate([videoX, D, H])
+                    rotate([90, 0, 0])
+                        cylinder(r = 10, h = 0.2, $fn = 32);
+            }
+            translate([videoX, 0, 0])
+                cube([100, D, H]);
+        }
+    }
+}
+
+if (1) {
+    translate([50, 0, 0]) {
+        difference() {
+            translate([videoX, 0, H - 40])
+                cube([45, 23, 40]);
+            translate([videoX, 23, H]) {
+                rotate([-13, 0, 0]) {
+                    translate([0, 0, -200])
+                        cube([100, 100, 200]);
+                    translate([0, -12, -21])
+                        cube([40, 12, 3]);
+                }
+            }
+            // screw holes
+            translate([videoX + thick, 7, 30 * 5 + 7]) {
+                rotate([0, 90, 0]) {
+                    sarakineji_hole();
+                    cylinder(r = 4, h = 45 - thick, $fn = 32);
+                }
+            }
+            translate([videoX + thick, 7, H - 7]) {
+                rotate([0, 90, 0]) {
+                    sarakineji_hole();
+                    cylinder(r = 4, h = 45 - thick, $fn = 32);
+                }
+            }
         }
     }
 }
@@ -294,4 +398,3 @@ module sarakineji_hole () {
             cylinder(r = 1.3, h = 11.7, $fn = 16);
     }
 }
-
