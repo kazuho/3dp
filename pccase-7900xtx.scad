@@ -148,6 +148,9 @@ if (1) {
             cube([thick + 0.2, rearD + 0.2, H]);
             translate([0, 0, H - thick - 0.2])
                 cube([videoX, rearD + 0.2, thick + 0.2]);
+            for (z = [0, H - 10.2])
+                translate([videoX - 10.2, 0, z])
+                    cube([10.2, rearD, 10.2]);
             // inner
             difference() {
                 translate([thick, rearD - 19.8, thick])
@@ -170,9 +173,19 @@ if (1) {
                     linear_extrude(videoX)
                         polygon([[-H + thick, rearD - 20], [-H + thick, rearD + thick * 2], [-H + thick * 2, rearD + thick], [-H + thick * 2, rearD - 20]]);
                 }
+                difference() {
+                    translate([videoX - 10.2 - thick, 0, 0])
+                        cube([thick + 10.2, rearD + thick * 2, H]);
+                    translate([videoX - 10.2 - thick, rearD - 19.8 + thick, 10.2 + thick])
+                        cube([10.2, 100, H - (10.2 + thick) * 2]);
+                }
                 // power
                 translate([0, D - thick - powerD , 0])
                     cube([videoX, powerD, powerZ]);
+                // rear screw holes
+                for (z = [0, H - 12])
+                    translate([0, rearD - 14, z])
+                        cube([24, 8, 12]);
             }
             // power
             difference() {
@@ -183,6 +196,31 @@ if (1) {
             }
             translate([thick * 2, D - thick - powerD + 10, powerZ - thick])
                 cube([powerW - thick * 2, powerD - 20, thick]);
+            // rear screw holes
+            for (x = [thick + 10, thick + 20]) {
+                translate([x, rearD - 10, 0])
+                    rotate([180, 0, 0])
+                        sarakineji_hole();
+                translate([x, rearD - 10, H])
+                        sarakineji_hole();
+            }
+            for (z = [15, 25, H - 25, H - 15]) {
+                translate([videoX - 5, rearD - 19.8, z])
+                    rotate([90, 0, 0])
+                        nabeneji_hole();
+            }
+            // power screw holes
+            for (x = [thick + 6, thick + powerW - 6])
+                for (y = [D - thick - powerD + 6, D - thick - 6])
+                    translate([x, y, powerZ])
+                        nabeneji_hole();
+            // video screwholes
+            for (i = [7:11]) {
+                videoScrewHole(30 * i + 7, 7);
+                videoScrewHole(30 * i + 7, H - 7);
+            }
+            for (i = [0:5])
+                videoScrewHole(D - 7, 30 * i + 7);
             // side holes
             for (y = [3:5]) {
                 for (z = [-1:4]) {
@@ -215,6 +253,24 @@ if (1) {
                     }
                 }
             }
+            // front holes
+            translate([thick * 2, D - thick, thick * 2])
+                cube([thick * 4, thick, H - thick * 4]);
+            for (z = [thick * 2, H - thick * 4])
+                translate([thick * 2, D - 1, z])
+                    cube([videoX - thick * 2, 1, thick * 2]);
+        }
+        // build plate adhersion
+        difference() {
+            union() {
+                translate([videoX, D, 0])
+                    rotate([90, 0, 0])
+                        cylinder(r = 10, h = 0.2, $fn = 32);
+                translate([videoX, D, H])
+                    rotate([90, 0, 0])
+                        cylinder(r = 10, h = 0.2, $fn = 32);
+            }
+            cube([videoX, D, H]);
         }
     }
 }
