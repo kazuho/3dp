@@ -91,6 +91,17 @@ difference() {
         cube([videoX - 26, powerD - thick - R, thick]);
     translate([16, D - thick - powerD, thick])
         cube([videoX - 26, thick, powerZ - thick * 2]);
+    // video card screw holes
+    for (z = [7, H - 7])
+        for (i = [0:8])
+            translate([videoX, R + (D - R * 2) / 8 * i, z])
+                rotate([0, 90, 0])
+                    nabeneji_hole();
+    for (y = [7, D - 7])
+        for (i = [0:4])
+            translate([videoX, y, R + (H - R * 2) / 4 * i])
+                rotate([0, 90, 0])
+                    nabeneji_hole();
 }
 // mb screws
 difference() {
