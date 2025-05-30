@@ -5,7 +5,7 @@ mbW = 52;
 mbD = 174.5;
 mbH = 174;
 mbBackplateH = 164;
-mbScrewX = thick + 47;
+mbScrewX = thick + 47; /* does this reflect the side change? */
 mbScrew1Y = mbY + 37;
 mbScrew1Z = thick + 10;
 mbScrew2Y = mbY + mbD - 5;
@@ -24,6 +24,7 @@ videoW = 59;
 W = thick + powerW + 6 + videoW + 1 + thick;
 D = 365;
 H = thick + mbH + 21 + thick;
+rearD = D - thick - powerD - 10;
 
 difference() {
     hull() {
@@ -44,8 +45,8 @@ difference() {
         // bottom split
         translate([videoX - 10, 0, 0])
             cube([10, D, 10]);
-        translate([videoX - thick * 2, D - thick - powerD - 10, 0])
-            cube([thick * 2, powerD + 10 + thick, 30]);
+        translate([videoX - thick * 2, rearD, 0])
+            cube([thick * 2, D - rearD, 30]);
         // rear split
         translate([videoX - 10, 0, 0])
             cube([10, 20, H]);
@@ -53,20 +54,59 @@ difference() {
         translate([videoX - 10, 0, H - 10])
             cube([10, D, 10]);
         translate([videoX - thick * 2, 0, H - 30])
-            cube([thick * 2, D - thick - powerD - 10, 30]);
+            cube([thick * 2, rearD, 30]);
         // mid split
-        translate([videoX - 10, D - thick - powerD - 22, 0])
+        translate([videoX - 10, rearD - 10, 0])
             cube([10, 12, H]);
         // front split
-        translate([videoX - 10, D - 10, 0])
-            cube([10, 10, H]);
+        translate([thick + powerW, D - 10, 0])
+            cube([videoX - (thick + powerW), 10, H]);
         translate([videoX - thick * 2, D - 20, 0])
             cube([thick * 2, 20, H]);
+        // mb roof
+        translate([0, 0, 0])
+            cube([thick, mbY, H]);
+        // power
+        difference() {
+            translate([thick, D - thick - powerD, 0])
+                cube([videoX - thick, powerD, powerZ]);
+            translate([thick * 2, D - thick - powerD, 0])
+                cube([videoX - thick, powerD, powerZ - thick]);
+        }
     }
+    // mb backplate
+    translate([3, 0, thick])
+        cube([mbW, R, mbBackplateH]); /* TODO H */
 }
 // mb screws
-translate([mbScrewX, mbScrew1Y - 4, 0])
-    cube([12, 8, mbScrew1Z + 4]);
+difference() {
+    translate([mbScrewX, mbScrew1Y - 4, 0])
+        cube([videoX - mbScrewX, 8, mbScrew1Z + 4]);
+    translate([mbScrewX, mbScrew1Y, mbScrew1Z])
+        rotate([0, -90, 0])
+            mokuneji_hole();
+}
+difference() {
+    translate([mbScrewX, mbScrew2Y - 4, 0])
+        cube([videoX - mbScrewX, 8, mbScrew2Z + 4]);
+    translate([mbScrewX, mbScrew2Y, mbScrew2Z])
+        rotate([0, -90, 0])
+            mokuneji_hole();
+}
+difference() {
+    translate([mbScrewX, mbScrew3Y - 4, mbScrew3Z - 4])
+        cube([videoX - mbScrewX, 8, H - (mbScrew3Z - 4)]);
+    translate([mbScrewX, mbScrew3Y, mbScrew3Z])
+        rotate([0, -90, 0])
+            mokuneji_hole();
+}
+difference() {
+    translate([mbScrewX, mbScrew4Y - 4, mbScrew4Z - 4])
+        cube([videoX - mbScrewX, 8, H - (mbScrew4Z - 4)]);
+    translate([mbScrewX, mbScrew4Y, mbScrew4Z])
+        rotate([0, -90, 0])
+            mokuneji_hole();
+}
 
 module sarakineji_hole () {
     union() {
@@ -75,4 +115,9 @@ module sarakineji_hole () {
         translate([0, 0, -11.7])
             cylinder(r = 1.3, h = 11.7, $fn = 16);
     }
+}
+
+module mokuneji_hole() {
+    translate([0, 0, -10])
+        cylinder(r = 1.3, h = 10, $fn = 16);
 }
