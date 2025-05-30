@@ -5,7 +5,7 @@ mbW = 52;
 mbD = 174.5;
 mbH = 174;
 mbBackplateH = 164;
-mbScrewX = thick + 45;
+mbScrewX = thick + 47;
 mbScrew1Y = mbY + 37;
 mbScrew1Z = thick + 10;
 mbScrew2Y = mbY + mbD - 5;
@@ -55,8 +55,8 @@ difference() {
         translate([videoX - thick * 2, 0, H - 30])
             cube([thick * 2, D - thick - powerD - 10, 30]);
         // mid split
-        translate([videoX - 10, D - thick - powerD - 20, 0])
-            cube([10, 10, H]);
+        translate([videoX - 10, D - thick - powerD - 22, 0])
+            cube([10, 12, H]);
         // front split
         translate([videoX - 10, D - 10, 0])
             cube([10, 10, H]);
@@ -64,6 +64,9 @@ difference() {
             cube([thick * 2, 20, H]);
     }
 }
+// mb screws
+translate([mbScrewX, mbScrew1Y - 4, 0])
+    cube([12, 8, mbScrew1Z + 4]);
 
 module sarakineji_hole () {
     union() {
