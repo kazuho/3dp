@@ -102,6 +102,11 @@ difference() {
             translate([videoX, y, R + (H - R * 2) / 4 * i])
                 rotate([0, 90, 0])
                     nabeneji_hole();
+    // rear-front screw
+    for (z = [20, H - 40])
+        translate([videoX - 5, rearD - 2, z])
+            rotate([90, 0, 0])
+                sarakineji_hole();
 }
 // mb screws
 difference() {
