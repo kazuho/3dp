@@ -98,28 +98,28 @@ difference() {
         cube([videoX - mbScrewX, 8, mbScrew1Z + 4]);
     translate([mbScrewX, mbScrew1Y, mbScrew1Z])
         rotate([0, -90, 0])
-            mokuneji_hole();
+            nabeneji_hole();
 }
 difference() {
     translate([mbScrewX, mbScrew2Y - 4, 0])
         cube([videoX - mbScrewX, 8, mbScrew2Z + 4]);
     translate([mbScrewX, mbScrew2Y, mbScrew2Z])
         rotate([0, -90, 0])
-            mokuneji_hole();
+            nabeneji_hole();
 }
 difference() {
     translate([mbScrewX, mbScrew3Y - 4, mbScrew3Z - 4])
         cube([videoX - mbScrewX, 8, H - (mbScrew3Z - 4)]);
     translate([mbScrewX, mbScrew3Y, mbScrew3Z])
         rotate([0, -90, 0])
-            mokuneji_hole();
+            nabeneji_hole();
 }
 difference() {
     translate([mbScrewX, mbScrew4Y - 4, mbScrew4Z - 4])
         cube([videoX - mbScrewX, 8, H - (mbScrew4Z - 4)]);
     translate([mbScrewX, mbScrew4Y, mbScrew4Z])
         rotate([0, -90, 0])
-            mokuneji_hole();
+            nabeneji_hole();
 }
 // panel holes
 for (i = [0:3]) {
@@ -145,7 +145,7 @@ module sarakineji_hole () {
     }
 }
 
-module mokuneji_hole() {
+module nabeneji_hole() {
     translate([0, 0, -10])
         cylinder(r = 1.3, h = 10, $fn = 16);
 }
