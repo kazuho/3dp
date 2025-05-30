@@ -78,19 +78,19 @@ difference() {
         }
         translate([thick, D - thick - 5, powerZ + powerH])
             cube([videoX - thick, 5, thick]);
-        // floor enforcement
-        translate([12, panelHoleY + panelHoleInterval * 2, thick])
-            rotate([0, 90, 0])
-                cylinder(r = 4, h = W - 24, $fn = 32);
+        // floor / roof enforcement
+        for (z = [0, H - 6])
+            translate([thick + 0.2, panelHoleY + panelHoleInterval * 2 + 2, z])
+                cube([W - (thick + 0.2) * 2, 4, 6]);
     }
     // mb backplate
     translate([3, 0, thick])
-        cube([mbW, R, mbBackplateH]); /* TODO check if mbBackplateH - thick */
+        cube([mbW, R, mbBackplateH]);
     // power bottom
-    translate([12, D - thick - powerD + thick, 0])
-        cube([videoX - 22, powerD - thick - R, thick]);
-    translate([12, D - thick - powerD, thick])
-        cube([videoX - 22, thick, powerZ - thick * 2]);
+    translate([16, D - thick - powerD + thick, 0])
+        cube([videoX - 26, powerD - thick - R, thick]);
+    translate([16, D - thick - powerD, thick])
+        cube([videoX - 26, thick, powerZ - thick * 2]);
 }
 // mb screws
 difference() {
@@ -130,6 +130,9 @@ for (i = [0:3]) {
             panel_hole();
     translate([W, panelHoleY + panelHoleInterval * i, 0])
         rotate([0, 0, 180])
+            panel_hole();
+    translate([W, panelHoleY + panelHoleInterval * i, H])
+        rotate([180, 0, 180])
             panel_hole();
 }
 
