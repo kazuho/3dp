@@ -24,7 +24,10 @@ videoW = 59;
 W = thick + powerW + 6 + videoW + 1 + thick;
 D = 365;
 H = thick + mbH + 21 + thick;
-rearD = D - thick - powerD - 10;
+
+panelHoleInterval = 90;
+panelHoleY = (D - panelHoleInterval * 3) / 2;
+rearD = panelHoleY + panelHoleInterval * 2;
 
 difference() {
     hull() {
@@ -45,8 +48,8 @@ difference() {
         // bottom split
         translate([videoX - 10, 0, 0])
             cube([10, D, 10]);
-        translate([videoX - thick * 2, rearD, 0])
-            cube([thick * 2, D - rearD, 30]);
+        translate([videoX - 10, rearD, 0])
+            cube([10, D - rearD, 30]);
         // rear split
         translate([videoX - 10, 0, 0])
             cube([10, 20, H]);
@@ -56,7 +59,7 @@ difference() {
         translate([videoX - thick * 2, 0, H - 30])
             cube([thick * 2, rearD, 30]);
         // mid split
-        translate([videoX - 10, rearD - 10, 0])
+        translate([videoX - 10, rearD - 2, 0])
             cube([10, 12, H]);
         // front split
         translate([thick + powerW, D - 10, 0])
@@ -70,13 +73,24 @@ difference() {
         difference() {
             translate([thick, D - thick - powerD, 0])
                 cube([videoX - thick, powerD, powerZ]);
-            translate([thick * 2, D - thick - powerD, 0])
+            translate([thick, D - thick - powerD + thick, 0])
                 cube([videoX - thick, powerD, powerZ - thick]);
         }
+        translate([thick, D - thick - 5, powerZ + powerH])
+            cube([videoX - thick, 5, thick]);
+        // floor enforcement
+        translate([12, panelHoleY + panelHoleInterval * 2, thick])
+            rotate([0, 90, 0])
+                cylinder(r = 4, h = W - 24, $fn = 32);
     }
     // mb backplate
     translate([3, 0, thick])
-        cube([mbW, R, mbBackplateH]); /* TODO H */
+        cube([mbW, R, mbBackplateH]); /* TODO check if mbBackplateH - thick */
+    // power bottom
+    translate([12, D - thick - powerD + thick, 0])
+        cube([videoX - 22, powerD - thick - R, thick]);
+    translate([12, D - thick - powerD, thick])
+        cube([videoX - 22, thick, powerZ - thick * 2]);
 }
 // mb screws
 difference() {
@@ -107,6 +121,17 @@ difference() {
         rotate([0, -90, 0])
             mokuneji_hole();
 }
+// panel holes
+for (i = [0:3]) {
+    translate([0, panelHoleY + panelHoleInterval * i, 0])
+        panel_hole();
+    translate([0, panelHoleY + panelHoleInterval * i, H])
+        rotate([180, 0, 0])
+            panel_hole();
+    translate([W, panelHoleY + panelHoleInterval * i, 0])
+        rotate([0, 0, 180])
+            panel_hole();
+}
 
 module sarakineji_hole () {
     union() {
@@ -120,4 +145,26 @@ module sarakineji_hole () {
 module mokuneji_hole() {
     translate([0, 0, -10])
         cylinder(r = 1.3, h = 10, $fn = 16);
+}
+
+module panel_hole() {
+    difference() {
+        union() {
+            translate([0, -4, 0])
+                cube([16, 8, thick + 4]);
+            translate([0, 0, thick + 4])
+                rotate([0, 90, 0])
+                    cylinder(r = 4, h = 16, $fn = 32);
+        }
+        translate([0, -4, 0])
+            cube([thick + 0.2, 8, thick + 8]);
+        translate([0, 0, thick + 4])
+            rotate([0, -90, 0])
+                sarakineji_hole();
+        translate([0, 0, 6])
+            rotate([-90, 0, 0])
+                translate([0, 0, -4])
+                    linear_extrude(8)
+                        polygon([[11, -4], [17, 6], [17, -4]]);
+    }
 }
