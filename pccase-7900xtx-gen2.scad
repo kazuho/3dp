@@ -39,6 +39,14 @@ intersection() {
                      [W - (thick + 2.2), rearD + 3.8], [W - (thick + 2.2), rearD - 4.2],
                      [W, rearD - 4.2], [W, 0]]);
     }
+    // front
+    if (0) {
+        linear_extrude(H)
+            polygon([[0, D], [0, rearD - 4],
+                     [thick + 2, rearD - 4], [thick + 2, rearD + 4],
+                     [W - (thick + 2), rearD + 4], [W - (thick + 2), rearD - 4],
+                     [W, rearD - 4], [W, D]]);
+    }
 }
 
 module main() {
@@ -113,6 +121,9 @@ module main() {
         // mb backplate
         translate([3, 0, thick])
             cube([mbW, R, mbBackplateH]);
+        // HDMI slit
+        translate([videoX + 4, 0, 80])
+            cube([14, thick, H - 80 - R]);
         // power cord
         translate([3 + mbW, 0, thick])
             cube([8, R, 3]);
