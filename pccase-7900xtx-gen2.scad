@@ -32,7 +32,7 @@ rearD = panelHoleY + panelHoleInterval * 2;
 intersection() {
     main();
     // rear
-    if (1) {
+    if (0) {
         linear_extrude(H)
             polygon([[0, 0], [0, rearD - 4.2],
                      [thick + 2.2, rearD - 4.2], [thick + 2.2, rearD + 3.8],
@@ -40,7 +40,7 @@ intersection() {
                      [W, rearD - 4.2], [W, 0]]);
     }
     // front
-    if (0) {
+    if (1) {
         linear_extrude(H)
             polygon([[0, D], [0, rearD - 4],
                      [thick + 2, rearD - 4], [thick + 2, rearD + 4],
@@ -48,6 +48,12 @@ intersection() {
                      [W, rearD - 4], [W, D]]);
     }
 }
+// build plate adhersion
+for (y = [rearD, D])
+    for (z = [0, H])
+        translate([0, y, z])
+            rotate([0, 90, 0])
+                cylinder(r = R, h = 0.2, $fn = 32);
 
 module main() {
     difference() {
@@ -83,7 +89,7 @@ module main() {
             difference() {
                 translate([videoX - 10, rearD + 2, 0])
                     cube([10, 12, H]);
-                translate([thick, D - thick - powerD, powerZ])
+                translate([thick, D - thick * 2 - powerD, powerZ])
                     cube([powerW, powerD, powerH]);
             }
             // front split
@@ -95,13 +101,15 @@ module main() {
             cube([videoX, mbY, H]);
             // power
             difference() {
-                translate([thick, D - thick - powerD, 0])
-                    cube([videoX - thick, powerD, powerZ]);
-                translate([thick, D - thick - powerD + thick, 0])
-                    cube([videoX - thick, powerD, powerZ - thick]);
+                translate([thick, D - thick * 2 - powerD, 0])
+                    cube([videoX - thick, powerD + thick, powerZ]);
+                translate([thick, D - thick * 2 - powerD + thick, 0])
+                    cube([videoX - thick, powerD + thick, powerZ - thick]);
+                translate([thick + 5, D - thick * 2 - powerD + 10, powerZ - thick])
+                    cube([powerW - 10, powerD - 20, thick]);
             }
-            translate([thick, D - thick - 5, powerZ + powerH])
-                cube([videoX - thick, 5, thick]);
+            translate([thick, D - thick - (thick + 5), powerZ + powerH])
+                cube([videoX - thick, thick + 5, thick]);
             // floor / roof enforcement
             for (z = [0, H - 6])
                 translate([thick + 0.2, panelHoleY + panelHoleInterval * 2 + 2, z])
@@ -128,9 +136,9 @@ module main() {
         translate([3 + mbW, 0, thick])
             cube([8, R, 3]);
         // power bottom
-        translate([16, D - thick - powerD + thick, 0])
+        translate([16, D - thick * 2 - powerD + thick, 0])
             cube([videoX - 26, powerD - thick - R, thick]);
-        translate([16, D - thick - powerD, thick])
+        translate([16, D - thick * 2 - powerD, thick])
             cube([videoX - 26, thick, powerZ - thick * 2]);
         // video card screw holes
         for (z = [7, H - 7])
@@ -150,9 +158,9 @@ module main() {
                     saraneji_hole();
         // power screw holes
         for (x = [thick + 6, thick + powerW - 6]) {
-            translate([x, D - thick - powerD + 6, powerZ])
+            translate([x, D - thick * 2 - powerD + 6, powerZ])
                 nabeneji_hole();
-            translate([x, D - thick - powerD + 6, 0])
+            translate([x, D - thick * 2 - powerD + 6, 0])
                 cylinder(r = 4, h = powerZ - thick, $fn = 32);
         }
         // power button
