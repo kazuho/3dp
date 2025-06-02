@@ -81,8 +81,9 @@ module main() {
             translate([videoX - 10, 0, 0])
                 cube([10, 20, H]);
             // top split
-            translate([videoX - 10, 0, H - 10])
-                cube([10, D, 10]);
+            rotate([-90, 0, 0])
+                linear_extrude(D)
+                    polygon([[videoX - 20, -H], [videoX, -H], [videoX, -H + 10], [videoX - 10, -H + 10]]);
             translate([videoX - thick * 2, 0, H - 30])
                 cube([thick * 2, rearD + 2, 30]);
             // mid split
@@ -93,6 +94,11 @@ module main() {
                     cube([powerW, powerD, powerH]);
             }
             // front split
+            linear_extrude(powerZ)
+                polygon([[powerW + thick - R, D], [powerW + thick, D - R], [powerW + thick, D]]);
+            translate([0, 0, powerZ + powerH])
+                linear_extrude(H - (powerZ + powerH))
+                    polygon([[powerW + thick - 10, D], [powerW + thick, D - 10], [powerW + thick, D - thick]]);
             translate([thick + powerW, D - 10, 0])
                 cube([videoX - (thick + powerW), 10, H]);
             translate([videoX - thick * 2, D - 20, 0])
