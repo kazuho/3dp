@@ -74,9 +74,12 @@ module main() {
             }
             // bottom split
             translate([videoX - 10, 0, 0])
-                cube([10, D, 10]);
-            translate([videoX - 10, rearD + 2, 0])
-                cube([10, D - (rearD + 2), 30]);
+                cube([10, rearD + 2, 10]);
+            translate([0, rearD + 2, 0])
+                rotate([-90, 0, 0])
+                    linear_extrude(D - (rearD + 2))
+                        polygon([[videoX - 20, 0], [videoX - 20, -thick], [thick + powerW - 5, -powerZ],
+                                 [videoX , -powerZ], [videoX, 0]]);
             // rear split
             translate([videoX - 10, 0, 0])
                 cube([10, 20, H]);
@@ -90,27 +93,26 @@ module main() {
             difference() {
                 translate([videoX - 10, rearD + 2, 0])
                     cube([10, 12, H]);
-                translate([thick, D - thick * 2 - powerD, powerZ])
-                    cube([powerW, powerD, powerH]);
+                translate([0, 0, powerZ])
+                    linear_extrude(powerH)
+                        polygon([[videoX - 10, D - thick * 2 - powerD], [videoX - 2, rearD + 14], [videoX, rearD + 14],
+                                [videoX - 10, rearD + 14]]);
             }
             // front split
-            linear_extrude(powerZ)
-                polygon([[powerW + thick - R, D], [powerW + thick, D - R], [powerW + thick, D]]);
-            translate([0, 0, powerZ + powerH])
-                linear_extrude(H - (powerZ + powerH))
-                    polygon([[powerW + thick - 10, D], [powerW + thick, D - 10], [powerW + thick, D - thick]]);
-            translate([thick + powerW, D - 10, 0])
-                cube([videoX - (thick + powerW), 10, H]);
-            translate([videoX - thick * 2, D - 20, 0])
-                cube([thick * 2, 20, H]);
+            translate([0, 0, powerZ])
+                linear_extrude(H - powerZ)
+                    polygon([[videoX, D], [videoX, D - 20], [videoX - 2, D - 20], [thick + powerW, D - thick * 2],
+                             [thick + powerW - thick * 2, D]]);
             // mb rear
             cube([videoX, mbY, H]);
             // power
             difference() {
-                translate([thick, D - thick * 2 - powerD, 0])
-                    cube([videoX - thick, powerD + thick, powerZ]);
+                translate([thick, rearD + 2 /* D - thick * 2 - powerD */, 0])
+                    cube([videoX - thick, D - (rearD + 2) /* powerD + thick */, powerZ]);
                 translate([thick, D - thick * 2 - powerD + thick, 0])
-                    cube([videoX - thick, powerD + thick, powerZ - thick]);
+                    cube([thick, powerD + thick, powerZ - thick * 3]);
+                translate([thick * 2, D - thick * 2 - powerD + thick, 0])
+                    cube([videoX - thick * 2, powerD + thick, powerZ - thick]);
                 translate([thick + 5, D - thick * 2 - powerD + 10, powerZ - thick])
                     cube([powerW - 10, powerD - 20, thick]);
             }
@@ -143,9 +145,9 @@ module main() {
             cube([8, R, 3]);
         // power bottom
         translate([16, D - thick * 2 - powerD + thick, 0])
-            cube([videoX - 26, powerD - thick - R, thick]);
-        translate([16, D - thick * 2 - powerD, thick])
-            cube([videoX - 26, thick, powerZ - thick * 2]);
+            cube([videoX - 36, powerD - thick - R, thick]);
+        translate([16, rearD + 2, thick])
+            cube([videoX - 36, 10, powerZ - thick * 2]);
         // video card screw holes
         for (z = [7, H - 7])
             for (i = [0:8])
