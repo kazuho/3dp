@@ -78,7 +78,7 @@ module main() {
             translate([0, rearD + 2, 0])
                 rotate([-90, 0, 0])
                     linear_extrude(D - (rearD + 2))
-                        polygon([[videoX - 20, 0], [videoX - 20, -thick], [thick + powerW - 5, -powerZ],
+                        polygon([[videoX - 20, 0], [videoX - 20, -thick], [videoX - thick * 2, -powerZ],
                                  [videoX , -powerZ], [videoX, 0]]);
             // rear split
             translate([videoX - 10, 0, 0])
@@ -99,25 +99,35 @@ module main() {
                                 [videoX - 10, rearD + 14]]);
             }
             // front split
-            translate([0, 0, powerZ])
-                linear_extrude(H - powerZ)
-                    polygon([[videoX, D], [videoX, D - 20], [videoX - 2, D - 20], [thick + powerW, D - thick * 2],
-                             [thick + powerW - thick * 2, D]]);
+            translate([videoX - thick * 2, D - 20, 0])
+                cube([thick * 2, 20, H]);
+            difference() {
+                linear_extrude(H)
+                    polygon([[videoX - 20, D], [videoX - thick * 2, D - 20 + thick * 2], [videoX, D - 20 + thick * 2], [videoX, D]]);
+                translate([thick, D - thick * 2 - powerD, powerZ])
+                    cube([powerW, powerD, powerH]);
+            }
+            translate([thick, D - 10, powerZ + powerH])
+                cube([videoX - thick, 10, thick]);
             // mb rear
             cube([videoX, mbY, H]);
             // power
             difference() {
-                translate([thick, rearD + 2 /* D - thick * 2 - powerD */, 0])
-                    cube([videoX - thick, D - (rearD + 2) /* powerD + thick */, powerZ]);
+                translate([thick, rearD + 2, 0])
+                    cube([videoX - thick, D - (rearD + 2) , powerZ]);
                 translate([thick, D - thick * 2 - powerD + thick, 0])
                     cube([thick, powerD + thick, powerZ - thick * 3]);
                 translate([thick * 2, D - thick * 2 - powerD + thick, 0])
                     cube([videoX - thick * 2, powerD + thick, powerZ - thick]);
                 translate([thick + 5, D - thick * 2 - powerD + 10, powerZ - thick])
-                    cube([powerW - 10, powerD - 20, thick]);
+                    cube([videoX - (thick + 5), powerD - 20, thick]);
             }
-            translate([thick, D - thick - (thick + 5), powerZ + powerH])
-                cube([videoX - thick, thick + 5, thick]);
+            translate([thick, 0, 0])
+                rotate([0, 90, 0])
+                    linear_extrude(videoX - thick)
+                        polygon([[-powerZ + thick, D - thick * 2 - 10],
+                                [-powerZ + thick + (thick * 2 + 10), D],
+                                [-powerZ + thick, D]]);
             // floor / roof enforcement
             for (z = [0, H - 6])
                 translate([thick + 0.2, panelHoleY + panelHoleInterval * 2 + 2, z])
@@ -125,12 +135,12 @@ module main() {
             // power button
             translate([thick + 0.2, panelHoleY + panelHoleInterval * 3 + 4, H - thick]) {
                 difference() {
-                    translate([0, -thick, -9 - thick * 2])
-                        cube([9 + thick, 9 + thick * 2, 9 + thick * 2]);
-                    translate([0, 0, -13])
-                        cube([9, 9, 13]);
-                    translate([0, -1, -11])
-                        cube([9, 11, 2]);
+                    translate([0, -thick, -9 - thick])
+                        cube([9 + thick, 9 + thick * 2, 9 + thick]);
+                    translate([0, 0, -9])
+                        cube([9, 9, 9]);
+                    translate([0, 4.5, -2])
+                        cube([11, 6.5, 2]);
                 }
             }
         }
@@ -171,9 +181,6 @@ module main() {
             translate([x, D - thick * 2 - powerD + 6, 0])
                 cylinder(r = 4, h = powerZ - thick, $fn = 32);
         }
-        // power button
-        translate([thick + 0.2 + 1.5, panelHoleY + panelHoleInterval * 3 + 4 + 1.5, H - thick])
-            cube([6, 6, thick]);
     }
     // mb screws
     difference() {
