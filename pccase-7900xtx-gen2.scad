@@ -92,11 +92,17 @@ module main() {
             // mid split
             difference() {
                 translate([videoX - 10, rearD + 2, 0])
-                    cube([10, 12, H]);
-                translate([0, 0, powerZ])
-                    linear_extrude(powerH)
-                        polygon([[videoX - 10, D - thick * 2 - powerD], [videoX - 2, rearD + 14], [videoX, rearD + 14],
-                                [videoX - 10, rearD + 14]]);
+                    cube([10, 10, H]);
+                translate([thick, D - thick * 2 - powerD, powerZ])
+                    cube([powerW, powerD, powerH]);
+                intersection() {
+                    translate([0, 0, powerZ])
+                        linear_extrude(powerH)
+                            polygon([[videoX - thick * 2, rearD + 12], [videoX - 10, rearD + 2 + thick * 2],
+                                    [videoX - 10, rearD + 12]]);
+                    translate([0, D - thick * 2 - powerD, 0])
+                        cube([W, 100, H]);
+                }
             }
             // front split
             translate([videoX - thick * 2, D - 20, 0])
