@@ -29,31 +29,90 @@ panelHoleInterval = 90;
 panelHoleY = (D - panelHoleInterval * 3) / 2;
 rearD = panelHoleY + panelHoleInterval * 2;
 
-intersection() {
-    main();
-    // rear
-    if (0) {
-        linear_extrude(H)
-            polygon([[0, 0], [0, rearD - 4.2],
-                     [thick + 2.2, rearD - 4.2], [thick + 2.2, rearD + 3.8],
-                     [W - (thick + 2.2), rearD + 3.8], [W - (thick + 2.2), rearD - 4.2],
-                     [W, rearD - 4.2], [W, 0]]);
+if (0) {
+    intersection() {
+        main();
+        // rear
+        if (0) {
+            linear_extrude(H)
+                polygon([[0, 0], [0, rearD - 4.2],
+                        [thick + 2.2, rearD - 4.2], [thick + 2.2, rearD + 3.8],
+                        [W - (thick + 2.2), rearD + 3.8], [W - (thick + 2.2), rearD - 4.2],
+                        [W, rearD - 4.2], [W, 0]]);
+        }
+        // front
+        if (1) {
+            linear_extrude(H)
+                polygon([[0, D], [0, rearD - 4],
+                        [thick + 2, rearD - 4], [thick + 2, rearD + 4],
+                        [W - (thick + 2), rearD + 4], [W - (thick + 2), rearD - 4],
+                        [W, rearD - 4], [W, D]]);
+        }
     }
-    // front
-    if (1) {
-        linear_extrude(H)
-            polygon([[0, D], [0, rearD - 4],
-                     [thick + 2, rearD - 4], [thick + 2, rearD + 4],
-                     [W - (thick + 2), rearD + 4], [W - (thick + 2), rearD - 4],
-                     [W, rearD - 4], [W, D]]);
+    // build plate adhersion
+    for (y = [rearD, D])
+        for (z = [0, H])
+            translate([0, y, z])
+                rotate([0, 90, 0])
+                    cylinder(r = R, h = 0.2, $fn = 32);
+} else {
+    // video harness
+    difference() {
+        intersection() {
+            union() {
+                // front
+                if(0) translate([videoX, D - 70, 0])
+                    cube([10, 70, 70]);
+                // rear
+                translate([videoX, 0, 0])
+                    cube([45, 40, H]);
+            }
+            // hull
+            hull() {
+                for (y = [R, D - R])
+                    for (z = [R, H - R])
+                        rotate([0, 90, 0])
+                            translate([-z, y, 0])
+                                cylinder(r = R - thick - 0.2, h = W, $fn = 64);
+            }
+        }
+        // front
+        translate([videoX, D - 70, 17])
+            cube([2, 50, 70]);
+        translate([videoX + 2, D - 70, 22])
+            cube([10, 50, 70]);
+        // rear
+        translate([0, 0, H - 155]) {
+            rotate([-11, 0, 0]) {
+                cube([W, 100, 200]);
+                translate([videoX, -14, 117])
+                    cube([40, 14, 3]);
+            }
+        }
+        cube([W, 100, 120]);
+        // video card screw holes
+        for (z = [7, H - 7]) {
+            for (i = [0:8]) {
+                translate([videoX + 2, R + (D - R * 2) / 8 * i, z]) {
+                    rotate([0, 90, 0]) {
+                        saraneji_hole();
+                        cylinder(r = 4, h = W, $fn = 32);
+                    }
+                }
+            }
+        }
+        for (y = [7, D - 7]) {
+            for (i = [0:4]) {
+                translate([videoX + 2, y, R + (H - R * 2) / 4 * i]) {
+                    rotate([0, 90, 0]) {
+                        saraneji_hole();
+                        cylinder(r = 4, h = W, $fn = 32);
+                    }
+                }
+            }
+        }
     }
 }
-// build plate adhersion
-for (y = [rearD, D])
-    for (z = [0, H])
-        translate([0, y, z])
-            rotate([0, 90, 0])
-                cylinder(r = R, h = 0.2, $fn = 32);
 
 module main() {
     difference() {
