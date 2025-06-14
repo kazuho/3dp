@@ -29,6 +29,7 @@ panelHoleInterval = 90;
 panelHoleY = (D - panelHoleInterval * 3) / 2;
 rearD = panelHoleY + panelHoleInterval * 2;
 
+// body
 if (0) {
     intersection() {
         main();
@@ -41,7 +42,7 @@ if (0) {
                         [W, rearD - 4.2], [W, 0]]);
         }
         // front
-        if (1) {
+        if (0) {
             linear_extrude(H)
                 polygon([[0, D], [0, rearD - 4],
                         [thick + 2, rearD - 4], [thick + 2, rearD + 4],
@@ -50,13 +51,65 @@ if (0) {
         }
     }
     // build plate adhersion
-    for (y = [rearD, D])
-        for (z = [0, H])
-            translate([0, y, z])
-                rotate([0, 90, 0])
-                    cylinder(r = R, h = 0.2, $fn = 32);
-} else {
-    // video harness
+    if (0) {
+        for (y = [rearD, D])
+            for (z = [0, H])
+                translate([0, y, z])
+                    rotate([0, 90, 0])
+                        cylinder(r = R, h = 0.2, $fn = 32);
+    }
+}
+
+// side panel
+if (1) {
+    frontHalf = 0;
+    difference() {
+        union() {
+            difference() {
+                translate([0, frontHalf ? D / 2 + 0.1 : R, thick * 2])
+                    cube([thick - 0.2, D / 2 - 0.1 - R, H - thick * 4]);
+                brickH = (H - thick * 5) / 7 - thick;
+                brickD1 = brickH * 210 / 60;
+                brickD2 = brickH * 100 / 60;
+                for (y = [0:4]) {
+                    for (z = [0:6]) {
+                        translate([0, thick * 3 + (brickD1 + brickD2 + thick * 2) * (y - 0.5 * (z % 2)), thick * 3 + (brickH + thick) * z]) {
+                            hull() {
+                                for (y2 = [1, brickD1 - 1])
+                                    for(z2 = [1, brickH - 1])
+                                        translate([0, y2, z2])
+                                            rotate([0, 90, 0])
+                                                cylinder(r = 1, h = thick - 0.2, $fn = 16);
+                            }
+                            translate([0, brickD1 + thick, 0]) {
+                                hull() {
+                                    for (y2 = [1, brickD2 - 1])
+                                        for(z2 = [1, brickH - 1])
+                                            translate([0, y2, z2])
+                                                rotate([0, 90, 0])
+                                                    cylinder(r = 1, h = thick - 0.2, $fn = 16);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            for (z = [thick + 4, H - thick - 4])
+                for (y = [0:3])
+                    translate([0, panelHoleY + panelHoleInterval * y, z])
+                        rotate([0, 90, 0])
+                            cylinder(r = 3.8, h = thick, $fn = 32);
+        }
+        for (z = [thick + 4, H - thick - 4])
+            for (y = [0:3])
+                translate([-1, panelHoleY + panelHoleInterval * y, z])
+                    rotate([0, -90, 0])
+                        saraneji_hole();
+    }
+}
+
+// video harness
+if (0) {
     difference() {
         intersection() {
             union() {
@@ -292,7 +345,7 @@ module main() {
     }
 }
 
-module saraneji_hole () {
+module saraneji_hole() {
     union() {
         translate([0, 0, -3.7])
             cylinder(r1 = 0, r2 = 3.7, h = 3.7, $fn = 32);
