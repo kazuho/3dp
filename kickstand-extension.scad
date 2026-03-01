@@ -1,13 +1,16 @@
-inR = 10 / 2;
-outR = 11 / 2;
-inH = 20;
-outH = 35;
+RpipeIn = 7.6 / 2;
+Rpipe = 11 / 2;
+H = 30;
 fn = 128;
 
 difference() {
-    cylinder(r = outR, h = outH, $fn = fn);
-    cylinder(r = outR - 2, h = outH, $fn = fn);
-    translate([0, 0, outH - inH])
-        cylinder(r = inR, h = outH, $fn = fn);
-    cube([outR, 1, outH]);
+    union() {
+        translate([0, 0, -H])
+            cylinder(r = Rpipe, h = H, $fn = fn);
+        rotate([4, 0, 0])
+            translate([0, 0, -2])
+                cylinder(r = RpipeIn, h = 22, $fn = fn);
+    }
+    translate([-50, -50, -50])
+        cube([50, 100, 100]);
 }
