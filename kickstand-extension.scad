@@ -1,6 +1,6 @@
 RpipeIn = 7.5 / 2;
 Rpipe = 11 / 2;
-H = 30;
+H = 30; # 5 for 32-355
 fn = 128;
 
 difference() {
